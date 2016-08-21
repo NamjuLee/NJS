@@ -1,4 +1,3 @@
-
 /*
 * Copyright (c) 2009 NJ Namju Lee [www.njstudio.co.kr] 
 *
@@ -37,7 +36,6 @@ NLine.prototype.ToFluxLine = function(){
 NLine.prototype.ToString = function(){
     console.log("x: " + this.x + " , y: " + this.y +" , z: " + this.z);
 };
-
 NLine.GetPtFromIntersectionFromTwoLine = function(l1, l2){
 	if (CheckIntersection(l1.ptStart.x, l1.ptStart.y, l1.ptEnd.x, l1.ptEnd.y, l2.ptStart.x, l2.ptStart.y, l2.ptEnd.x, l2.ptEnd.y)) return p;
 	return p;
