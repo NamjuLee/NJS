@@ -1,12 +1,36 @@
 
+/*
+* Copyright (c) 2009 NJ Namju Lee [www.njstudio.co.kr] 
+*
+* nj.namju@gmailc.om
+*
+* This software is provided 'as-is', without any express or implied
+* warranty. In no event will the authors be held liable for any damages
+* arising from the use of this software.
+*
+* Permission is granted to anyone to use this software for any purpose,
+* including commercial applications, and to alter it and redistribute it
+* freely, subject to the following restrictions:
+*
+*    1. The origin of this software must not be misrepresented; you must not
+*    claim that you wrote the original software. If you use this software
+*    in a product, an acknowledgment in the product documentation would be
+*    appreciated but is not required.
+*
+*    2. Altered source versions must be plainly marked as such, and must not
+*    be misrepresented as being the original software.
+*
+*    3. This notice may not be removed or altered from any source
+*    distribution.
+*/
+
 
 function GLCanvasInit(){
-    console.log("this is GL Canvas")
+    console.log("this is webGL Canvas")
 
 
 
 }
-
 
 function GLWindow(divName){
     var self = this;
@@ -26,7 +50,7 @@ function GLWindow(divName){
 
     self.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
     self.camera.aspect = self.width/self.height;
-    self.camera.position.set( 0, 2, 5);
+    self.camera.position.set( 0, 20, 50);
     self.camera.updateProjectionMatrix();
 
 
@@ -112,6 +136,7 @@ function GLWindow(divName){
     self.Add(planeXYGeometry)
 
 // .....................................................................
+    self.scene.add( GetGridHelper(100, 50));
 
 
     self.Init();
@@ -164,7 +189,6 @@ GLWindow.prototype.getIntersectionAtScreenCoordinates=function(x,y) {
     var vector = new THREE.Vector3( nx, ny, 0.5 );
 
     // self.projector.unprojectVector( vector, self.camera );
-    
     self.raycaster = new THREE.Raycaster( self.camera.position, vector.sub( self.camera.position ).normalize() );
 
 
@@ -193,10 +217,31 @@ GLWindow.prototype.Add=function(obj){
 }
 GLWindow.prototype.Remove=function(obj){
     var self = this;
-    self.objects.push(obj);
-    self.scene.add(obj);
+    var list = [];
+    for (var i = self.objects.length - 1; i >= 0; i--) {
+        if(self.objects[i].name != obj.name) list.push(self.objects[i])
+    }
+    self.objects = list;
+    self.scene.remove(obj);
 }
+GLWindow.prototype.RemoveAll=function(){
+    var self = this;
+    for (var i = self.scene.children.length - 1; i >= 0; i--) {
+        // self.scene.children = []
+        // self.scene.remove(self.scene.children[i])
+        // self.Remove(self.objects[i]);
+        // self.scene.remove(self.objects[i]);
+    }
 
+    for (var i = self.objects.length - 1; i >= 0; i--) {
+        self.scene.remove(self.objects[i])
+    }
+    self.objects = [];
+}
+GLWindow.prototype.RemoveAllEntity=function(){
+    var self = this;
+    self.scene.children = [];
+}
 GLWindow.prototype.render=function() {
     var self = this;
     self.controls.update();
@@ -217,19 +262,16 @@ GLWindow.prototype.Init=function() {
     var newcube = new THREE.Mesh( cubegeometry, cubematerial );
     newcube.castShadow = true;
     newcube.receiveShadow = true;
-    this.Add(newcube);
+    self.Add(newcube);
 
-
+    
 };
 GLWindow.prototype.Update=function() {
-    // console.log(this.objects.length)
+    console.log(this.objects.length)
 
 
 };
-
-
 function updateGround() {
-
     t+=0.1;
     var x,z;
      for ( var i = 0, l = groundGeometry.vertices.length; i < l; i ++ ) {
@@ -242,7 +284,6 @@ function updateGround() {
         groundGeometry.vertices[ i ].y = Math.random() * 0.01+Math.cos(t+x*3.0)*0.2-0.4-mu;
 
     }
-
     groundGeometry.computeFaceNormals();
     groundGeometry.computeVertexNormals();
     groundGeometry.verticesNeedUpdate = true;
