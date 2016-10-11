@@ -1,4 +1,3 @@
-
 /*
 * Copyright (c) 2009 NJ Namju Lee [www.njstudio.co.kr] 
 *
@@ -27,8 +26,6 @@
 
 function GLCanvasInit(){
     console.log("this is webGL Canvas")
-
-
 
 }
 
@@ -238,11 +235,7 @@ GLWindow.prototype.render=function() {
 //................................................................................. public 
 GLWindow.prototype.Init=function() {
     console.log("this is Init")
-
-    
 };
 GLWindow.prototype.Update=function() {
     console.log(this.objects.length)
-
-
 };
